@@ -1,42 +1,32 @@
-package com.Crawler.model;
+package com.Crawler.crawler.model;
 
-import javax.persistence.*;
 
-@Entity
 public class WebPage {
-
+    
     public enum PageType {
         song, playlist, playlists;
     }
-
+    
     public enum Status {
         crawled, uncrawl;
     }
 
-    @Id
     private String url;
     private String title;
-
-    @Enumerated(EnumType.STRING)
     private PageType type;
-
-    @Enumerated(EnumType.STRING)
     private Status status;
-
-    @Transient
-    private String html;
-
+    
     public WebPage() {
         super();
     }
-
+    
     public WebPage(String url, PageType type) {
         super();
         this.url = url;
         this.type = type;
         this.status = Status.uncrawl;
     }
-
+    
     public WebPage(String url, PageType type, String title) {
         super();
         this.url = url;
@@ -59,14 +49,6 @@ public class WebPage {
 
     public void setType(PageType type) {
         this.type = type;
-    }
-
-    public String getHtml() {
-        return html;
-    }
-
-    public void setHtml(String html) {
-        this.html = html;
     }
 
     public Status getStatus() {

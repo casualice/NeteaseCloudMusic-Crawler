@@ -1,67 +1,70 @@
-package com.Crawler.service;
+package com.Crawler.crawler;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONPath;
-import com.google.common.collect.ImmutableMap;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.Crawler.model.WebPage;
-import com.Crawler.model.Song;
-import com.Crawler.model.WebPage.PageType;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
+import org.jsoup.Connection;
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONPath;
+import com.google.common.collect.ImmutableMap;
+import com.Crawler.crawler.model.WebPage;
+import com.Crawler.crawler.model.WebPage.PageType;
+
 public class HtmlParser {
-    public static final String BASE_URL = "http://music.163.com/";
-    public static final String text = "{\"username\": \"\", \"rememberLogin\": \"true\", \"password\": \"\"}";
-
-
-    private static boolean fetchHtml(WebPage webPage) throws IOException {
-        Connection.Response response = Jsoup.connect(webPage.getUrl()).timeout(3000).execute();
-        webPage.setHtml(response.body());
-        return response.statusCode() / 100 == 2 ? true : false;
-    }
-    private List<WebPage> parsePlaylists(WebPage webPage) {
-        Elements playlists = Jsoup.parse(webPage.getHtml()).select(".tit.f-thide.s-fc0");
+    
+    private static final HtmlFetcher HTML_FETCHER = new HtmlFetcher();
+    private static final String BASE_URL = "http://music.163.com/";
+    private static final String text = "{\"username\": \"\", \"rememberLogin\": \"true\", \"password\": \"\"}";
+    
+    public List<WebPage> parsePlaylists(String url) {
+        Document document = Jsoup.parse(HTML_FETCHER.fetch(url));
+        Elements playlists = document.select(".tit.f-thide.s-fc0");
         return playlists.stream().map(e -> new WebPage(BASE_URL + e.attr("href"), PageType.playlist)).collect(Collectors.toList());
     }
-
-    private List<WebPage> parsePlaylist(WebPage webPage) {
-        Elements songs = Jsoup.parse(webPage.getHtml()).select("ul.f-hide li a");
+    
+    public List<WebPage> parsePlaylist(String url) {
+        Elements songs = Jsoup.parse(HTML_FETCHER.fetch(url)).select("ul.f-hide li a");
         return songs.stream().map(e -> new WebPage(BASE_URL + e.attr("href"), PageType.song, e.html())).collect(Collectors.toList());
     }
-
-    private Song parseSong(WebPage webPage) throws Exception {
-        return new Song(webPage.getUrl(), webPage.getTitle(), getCommentCount(webPage.getUrl().split("=")[1]));
+    
+    public Long parseSong(String url) {
+        try {
+            return getCommentCount(url.split("=")[1]);
+        } catch (Exception e) {
+            return 0L;
+        }
     }
 
     private Long getCommentCount(String id) throws Exception {
         String secKey = new BigInteger(100, new SecureRandom()).toString(32).substring(0, 16);
         String encText = aesEncrypt(aesEncrypt(text, "0CoJUm6Qyw8W8jud"), secKey);
         String encSecKey = rsaEncrypt(secKey);
-        Connection.Response response = Jsoup
+        Response response = Jsoup
                 .connect("http://music.163.com/weapi/v1/resource/comments/R_SO_4_" + id + "/?csrf_token=")
                 .method(Connection.Method.POST).header("Referer", BASE_URL)
                 .data(ImmutableMap.of("params", encText, "encSecKey", encSecKey)).execute();
         return Long.parseLong(JSONPath.eval(JSON.parse(response.body()), "$.total").toString());
     }
+
     private String aesEncrypt(String value, String key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.getBytes("UTF-8"), "AES"), new IvParameterSpec(
                 "0102030405060708".getBytes("UTF-8")));
-        return Base64.encodeBase64String(cipher.doFinal(value.getBytes()));
+        return java.util.Base64.getEncoder().encodeToString(cipher.doFinal(value.getBytes()));
     }
 
     private String rsaEncrypt(String value) throws UnsupportedEncodingException {
@@ -79,12 +82,15 @@ public class HtmlParser {
     private String stringToHex(String text) throws UnsupportedEncodingException {
         return DatatypeConverter.printHexBinary(text.getBytes("UTF-8"));
     }
-    public static void main(String[] args) throws Exception {
-        WebPage playlists = new WebPage("http://music.163.com/#/discover/playlist/?cat=%E6%B8%85%E6%96%B0&order=hot", PageType.playlists);
-        HtmlParser crawlerThread = new HtmlParser();
-        HtmlParser.fetchHtml(playlists);
-        crawlerThread.parsePlaylists(playlists);
+    
+    public static <T> void main(String[] args) throws Exception {
+        HtmlParser htmlParser = new HtmlParser();
+        htmlParser.parsePlaylists("http://music.163.com/discover/playlist/?order=hot&cat=%E5%85%A8%E9%83%A8&limit=35&offset=0")
+        .forEach(playlist -> System.out.println(playlist));
+        System.out.println("=====================");
+        htmlParser.parsePlaylist("http://music.163.com/playlist?id=454016843").forEach(song -> System.out.println(song));
+        System.out.println("=====================");
+        System.out.println(htmlParser.parseSong("http://music.163.com/song?id=29999506"));
 
-        System.out.println(playlists.getHtml());
     }
 }

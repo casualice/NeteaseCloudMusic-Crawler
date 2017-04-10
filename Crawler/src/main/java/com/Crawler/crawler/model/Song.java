@@ -1,20 +1,16 @@
-package com.Crawler.model;
+package com.Crawler.crawler.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
-@Entity
 public class Song {
-
-    @Id
+    
     private String url;
     private String title;
     private Long commentCount;
-
+    
     public Song() {
         super();
     }
-
+    
     public Song(String url, String title, Long commentCount) {
         super();
         this.url = url;
