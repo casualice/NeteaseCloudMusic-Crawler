@@ -42,7 +42,7 @@ public interface Crawler {
     /**
      * 运行爬虫整体流程
      */
-    default void run() {
+    default void dorun() {
         initCrawlerList();
         doRun();
     }

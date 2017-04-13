@@ -14,32 +14,33 @@ public class BasicCrawler implements Crawler {
     private final HtmlParser htmlParser = new HtmlParser();
     public List<WebPage> crawlerList;
     public List<Song> songs = new ArrayList<>();
-    
+
     @Override
     public void initCrawlerList() {
         crawlerList = new ArrayList<WebPage>();
-//        for(int i = 0; i < 43; i++) {
-//            crawlerList.add(new WebPage("http://music.163.com/discover/playlist/?order=hot&cat=%E5%85%A8%E9%83%A8&limit=35&offset="  + (i * 35), PageType.playlists));
-//        }
+        for(int i = 0; i < 43; i++) {
+            crawlerList.add(new WebPage("http://music.163.com/discover/playlist/?order=hot&cat=%E5%85%A8%E9%83%A8&limit=35&offset="  + (i * 35), WebPage.PageType.playlists));
+        }
         crawlerList.add(new WebPage("http://music.163.com/playlist?id=454016843", WebPage.PageType.playlist));
     }
 
     @Override
     public WebPage getUnCrawlPage() {
-        // your code here
-        if (crawlerList.get(crawlerList.size()-1).getStatus().equals(WebPage.Status.uncrawl)) {
-            WebPage w=crawlerList.get(crawlerList.size()-1);
-            crawlerList.remove(crawlerList.size()-1);
-            return w;
+        if(crawlerList.size()>0) {
+            if (crawlerList.get(crawlerList.size() - 1).getStatus().equals(WebPage.Status.uncrawl)) {
+                WebPage w = crawlerList.get(crawlerList.size() - 1);
+                crawlerList.remove(crawlerList.size() - 1);
+                return w;
+            } else {
+                return null;
+            }
         }
-        else {
+        else
             return null;
-        }
     }
 
     @Override
     public List<WebPage> addToCrawlList(List<WebPage> webPages) {
-     // your code here
         for (int i=0;i<webPages.size();i++)
             crawlerList.add(webPages.get(i));
         return null;
@@ -47,7 +48,6 @@ public class BasicCrawler implements Crawler {
 
     @Override
     public Song saveSong(Song song) {
-     // your code here
         songs.add(song);
         return null;
     }
@@ -56,7 +56,6 @@ public class BasicCrawler implements Crawler {
     public void doRun() {
         WebPage webPage;
         while ((webPage = getUnCrawlPage()) != null) {
-           // your code here
             if(WebPage.PageType.playlists.equals(webPage.getType())){
                 addToCrawlList(htmlParser.parsePlaylists(webPage.getUrl()));
             }
@@ -71,15 +70,14 @@ public class BasicCrawler implements Crawler {
 
     @Override
     public List<Song> getSongs() {
-     // your code here
         songs.get(songs.size());
         return null;
     }
-    
+
     public static <T> void main(String[] args) throws Exception {
         Date startTime = new Date();
         Crawler crawler = new BasicCrawler();
-        crawler.run();
+        crawler.doRun();
 //        for(Song song : crawler.getSongs()) {
 //            System.out.println(song);
 //        }
