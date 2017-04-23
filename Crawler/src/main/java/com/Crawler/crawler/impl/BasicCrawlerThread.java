@@ -1,6 +1,5 @@
 package com.Crawler.crawler.impl;
 
-import com.Crawler.crawler.Crawler;
 import com.Crawler.crawler.HtmlParser;
 import com.Crawler.crawler.model.WebPage;
 
@@ -9,16 +8,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 
-public class BasiCrawlerThread implements Runnable{
+public class BasicCrawlerThread implements Runnable{
 
     private final HtmlParser htmlParser = new HtmlParser();
     private final BasicCrawler crawler;
-    public BasiCrawlerThread(BasicCrawler basicCrawler) {
+    public BasicCrawlerThread(BasicCrawler basicCrawler) {
         super();
         this.crawler = basicCrawler;
     }
-
-
 
     @Override
     public void run() {
@@ -41,7 +38,7 @@ public class BasiCrawlerThread implements Runnable{
     public void runThreads() throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(MAX_THREADS);
         for(int i = 0; i < MAX_THREADS; i++) {
-            executorService.execute(new BasiCrawlerThread(this.crawler));
+            executorService.execute(new BasicCrawlerThread(this.crawler));
         }
         executorService.shutdown();
         executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
@@ -49,7 +46,7 @@ public class BasiCrawlerThread implements Runnable{
 
     public  static<T> void main(String args[]){
         BasicCrawler crawler = new BasicCrawler();
-        BasiCrawlerThread basiCrawlerThread = new BasiCrawlerThread(crawler);
+        BasicCrawlerThread basiCrawlerThread = new BasicCrawlerThread(crawler);
         try {
             basiCrawlerThread.runThreads();
         } catch (InterruptedException e) {
