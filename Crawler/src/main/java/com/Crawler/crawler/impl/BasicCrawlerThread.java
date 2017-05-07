@@ -1,6 +1,6 @@
 package com.Crawler.crawler.impl;
 
-import com.Crawler.crawler.HtmlParser;
+import com.Crawler.crawler.CrawlerThread;
 import com.Crawler.crawler.model.WebPage;
 
 import java.util.concurrent.ExecutorService;
@@ -10,9 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 public class BasicCrawlerThread implements Runnable{
 
-    private final HtmlParser htmlParser = new HtmlParser();
-    private final BasicCrawler crawler;
-    public BasicCrawlerThread(BasicCrawler basicCrawler) {
+    private final CrawlerThread htmlParser = new CrawlerThread();
+    private final CrawlerService crawler;
+    public BasicCrawlerThread(CrawlerService basicCrawler) {
         super();
         this.crawler = basicCrawler;
     }
@@ -45,7 +45,7 @@ public class BasicCrawlerThread implements Runnable{
     }
 
     public  static<T> void main(String args[]){
-        BasicCrawler crawler = new BasicCrawler();
+        CrawlerService crawler = new CrawlerService();
         BasicCrawlerThread basiCrawlerThread = new BasicCrawlerThread(crawler);
         try {
             basiCrawlerThread.runThreads();

@@ -3,7 +3,6 @@ package com.Crawler.crawler;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +11,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
+import com.Crawler.crawler.impl.CrawlerService;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -24,16 +24,23 @@ import com.google.common.collect.ImmutableMap;
 import com.Crawler.crawler.model.WebPage;
 import com.Crawler.crawler.model.WebPage.PageType;
 
-public class HtmlParser {
+public class CrawlerThread implements Runnable {
     
     private static final HtmlFetcher HTML_FETCHER = new HtmlFetcher();
     private static final String BASE_URL = "http://music.163.com/";
     private static final String text = "{\"username\": \"\", \"rememberLogin\": \"true\", \"password\": \"\"}";
-    
+    private CrawlerService crawlerService;
+
+    public CrawlerThread() {
+        super();
+    }
+
+    public CrawlerThread(CrawlerService crawlerService) {
+        this.crawlerService = crawlerService;
+    }
+
     public List<WebPage> parsePlaylists(String url) {
-        Document document = Jsoup.parse(HTML_FETCHER.fetch(url));
-        Elements playlists = document.select(".tit.f-thide.s-fc0");
-        return playlists.stream().map(e -> new WebPage(BASE_URL + e.attr("href"), PageType.playlist)).collect(Collectors.toList());
+        return null;
     }
     
     public List<WebPage> parsePlaylist(String url) {
@@ -84,13 +91,18 @@ public class HtmlParser {
     }
     
     public static <T> void main(String[] args) throws Exception {
-        HtmlParser htmlParser = new HtmlParser();
+        CrawlerThread htmlParser = new CrawlerThread();
         htmlParser.parsePlaylists("http://music.163.com/discover/playlist/?order=hot&cat=%E5%85%A8%E9%83%A8&limit=35&offset=0")
         .forEach(playlist -> System.out.println(playlist));
         System.out.println("=====================");
         htmlParser.parsePlaylist("http://music.163.com/playlist?id=454016843").forEach(song -> System.out.println(song));
         System.out.println("=====================");
         System.out.println(htmlParser.parseSong("http://music.163.com/song?id=29999506"));
+
+    }
+
+    @Override
+    public void run() {
 
     }
 }
