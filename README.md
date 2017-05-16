@@ -31,3 +31,4 @@
 	2017.4.24 更新一个简单的Spring Boot学习练习代码。
 	2017.4.30 更新一个新的Spring Boot Demo。
 	2017.5.7  用Spring boot改写项目。
+	2017.5.16 上传一个SpringJPA的练手demo。
