@@ -42,8 +42,10 @@
       <hr></hr>
        <nav>
         <ul class="pager">
+          <li class="previous"><a th:href="@{'/songs' + '?page=' + 0}">首页</a></li>
           <li th:unless="${songs.first}" class="previous"><a th:href="@{'/songs' + '?page=' + ${songs.number - 1}}">上一页<span aria-hidden="true">&larr;</span></a></li>
           <li th:unless="${songs.last}" class="next"><a th:href="@{'/songs' + '?page=' + ${songs.number + 1}}">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+          <li class="next"><a th:href="@{'/songs' + '?page=' + ${songs.totalElements/100}}">末页</a></li>
         </ul>
       </nav>
      </div>

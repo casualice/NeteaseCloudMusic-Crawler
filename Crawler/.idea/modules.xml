@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Crawler.iml" filepath="$PROJECT_DIR$/Crawler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/neteaseMusicCrawler.iml" filepath="$PROJECT_DIR$/neteaseMusicCrawler.iml" />
     </modules>
   </component>
 </project>

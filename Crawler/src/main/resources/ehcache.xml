@@ -5,7 +5,7 @@
          updateCheck="false"
          maxBytesLocalHeap="16M">
 
-    <diskStore path="/data"/>
+    <diskStore path="/home/tmy/data"/>
 
     <defaultCache
             eternal="false"
@@ -15,5 +15,5 @@
             timeToLiveSeconds="36000"
             />
             
-    <cache name="com.crawler.Songs"></cache>
+    <cache name="CrawlerSong"></cache>
 </ehcache>
