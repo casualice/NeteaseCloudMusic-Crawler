@@ -1,13 +1,13 @@
-# Music Reptile
+# NeteaseCloudMusic Crawler
 概述：
 ---------
   一个使用Java实现的爬虫程序，用于爬取网易云音乐上的音乐信息。
 
 ## 使用方法：
   
-1.访问localhost:8080/init?auth=123456 初始化歌曲分类。
+1.访问localhost:8080/init?auth=888888 初始化歌曲分类。
 
-2.访问localhost:8080/crawl?auth=123456。
+2.访问localhost:8080/crawl?auth=888888。
 
 3.点击歌曲评论数排行榜，可查看网易云音乐上评论量最多的歌曲(根据评论数降序排序)。
 
