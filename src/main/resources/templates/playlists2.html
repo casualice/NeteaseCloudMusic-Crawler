@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"></meta>
+    <title>歌单列表(按收藏量排序)</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="/css/footer.css"></link>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">网易云音乐歌单列表(共<span th:text="${playlists2.totalElements}"></span>份歌单)</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin-top:50px">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="blog-post">
+                <span class="col-sm-8"></span>
+            </div>
+            <h3><a href="">网易云音乐爬虫</a></h3>
+            <a href="/">回到主页</a>
+            <a href="/playlists">按播放量排序</a>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>歌单</th>
+                    <th>收藏量</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="playlist: ${playlists2.content}">
+                    <td><a th:text="${playlist.name}" th:href="@{${playlist.url}}" target="_blank"></a></td>
+                    <td th:text="${playlist.collectCount}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr></hr>
+            <nav>
+                <ul class="pager">
+                    <li class="previous"><a th:href="@{'/playlists2' + '?page=' + 0}">首页</a></li>
+                    <li th:unless="${playlists2.first}" class="previous"><a th:href="@{'/playlists2' + '?page=' + ${playlists2.number - 1}}">上一页<span aria-hidden="true">&larr;</span></a></li>
+                    <li th:unless="${playlists2.last}" class="next"><a th:href="@{'/playlists2' + '?page=' + ${playlists2.number + 1}}">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+                    <li class="next"><a th:href="@{'/playlists2' + '?page=' + ${playlists2.totalElements/100}}">末页</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

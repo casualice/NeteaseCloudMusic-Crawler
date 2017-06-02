@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="poi-3.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../爬虫/NetEaseCloudMusicCrawler-master/lib/poi-3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

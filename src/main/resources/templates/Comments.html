@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"></meta>
+    <title>评论列表(按评论点赞数排序)</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="/css/footer.css"></link>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">热门评论列表(共<span th:text="${Comments.totalElements}"></span>个评论)</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin-top:50px">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="blog-post">
+                <span class="col-sm-8"></span>
+            </div>
+            <h3><a href="">网易云音乐爬虫</a></h3>
+            <a href="/">回到主页</a>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>评论内容</th>
+                    <th th:width="150px">歌名-歌手</th>
+                    <th>点赞数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="Comment: ${Comments.content}">
+                    <td><a th:text="${Comment.content}"  target="_blank"></a></td>
+                    <td th:text="${Comment.songTitle}"></td>
+                    <td th:text="${Comment.appreciation}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr></hr>
+            <nav>
+                <ul class="pager">
+                    <li class="previous"><a th:href="@{'/Comments' + '?page=' + 0}">首页</a></li>
+                    <li th:unless="${Comments.first}" class="previous"><a th:href="@{'/Comments' + '?page=' + ${Comments.number - 1}}">上一页<span aria-hidden="true">&larr;</span></a></li>
+                    <li th:unless="${Comments.last}" class="next"><a th:href="@{'/Comments' + '?page=' + ${Comments.number + 1}}">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+                    <li class="next"><a th:href="@{'/Comments' + '?page=' + ${Comments.totalElements/100}}">末页</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

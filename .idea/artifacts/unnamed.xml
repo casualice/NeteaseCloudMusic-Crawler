@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="unnamed">
+    <output-path>$PROJECT_DIR$</output-path>
+    <root id="archive" name="musiccrawler.war">
+      <element id="dir-copy" path="$PROJECT_DIR$" />
+    </root>
+  </artifact>
+</component>

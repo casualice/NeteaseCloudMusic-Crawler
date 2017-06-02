@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"></meta>
+    <title>根据url获得信息</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="/css/footer.css"></link>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/index">网易云音乐</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin-top:50px">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="blog-post">
+                <span class="col-sm-8"></span>
+            </div>
+            <h3><a href="">网易云音乐爬虫</a></h3>
+            <a href="/songs">歌曲评论排行榜</a>
+            <a href="/">回到首页</a>
+            <hr></hr>
+            <h4>请在下方输入要获取信息的对应url：</h4>
+            <center>
+                <form action="/songmsg"  method="post">
+                    <input type="text" name="url"></input>
+                    <input type="submit"></input>
+                </form>
+            </center>
+        </div>
+    </div>
+</div>
+</body>
+</html>
