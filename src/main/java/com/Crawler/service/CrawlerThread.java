@@ -73,7 +73,14 @@ public class CrawlerThread implements Runnable {
     }
 
     private boolean fetchHtml(WebPage webPage) throws IOException {
-        Response response = Jsoup.connect(webPage.getUrl()).execute();
+        Response response = Jsoup.connect(webPage.getUrl()).timeout(3000)
+                .header("Host", "http://music.163.com")
+                .header("User-Agent", "  Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0")
+                .header("Accept", "  text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                .header("Accept-Language", "zh-cn,zh;q=0.5")
+                .header("Accept-Charset", "  GB2312,utf-8;q=0.7,*;q=0.7")
+                .header("Connection", "keep-alive")
+                .execute();
         webPage.setHtml(response.body());
         return response.statusCode() / 100 == 2 ? true : false;
     }
